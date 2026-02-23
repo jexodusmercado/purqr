@@ -157,4 +157,48 @@ export const QR_TEMPLATES: QrTemplate[] = [
       shadow: { enabled: true, color: '#8800ff', opacity: 0.5, blur: 20, offsetX: 0, offsetY: 0 },
     },
   },
+  {
+    id: 'glossy-purple',
+    name: 'Glossy Purple',
+    description: 'Rounded glossy purple corners with radial gradients for a 3D look.',
+    overrides: {
+      dotType: 'extra-rounded',
+      dotGradient: {
+        type: 'radial',
+        rotation: 0,
+        colorStops: [
+          { offset: 0, color: '#B07AEA' },
+          { offset: 1, color: '#6B21A8' },
+        ],
+      },
+      cornerSquareType: 'extra-rounded',
+      cornerSquareColor: '#7C3AED',
+      cornerSquareGradient: {
+        type: 'radial',
+        rotation: 0,
+        colorStops: [
+          { offset: 0, color: '#B07AEA' },
+          { offset: 1, color: '#6B21A8' },
+        ],
+      },
+      cornerDotType: 'extra-rounded',
+      cornerDotColor: '#7C3AED',
+      cornerDotGradient: {
+        type: 'radial',
+        rotation: 0,
+        colorStops: [
+          { offset: 0, color: '#C4A0F0' },
+          { offset: 1, color: '#7C3AED' },
+        ],
+      },
+      backgroundColor: '#ffffff',
+      backgroundGradient: undefined,
+      backgroundRound: 0,
+      shape: 'square',
+      imageSize: 0.4,
+      imageMargin: 0,
+      hideBackgroundDots: true,
+      shadow: { enabled: false, color: '#000000', opacity: 0.3, blur: 10, offsetX: 3, offsetY: 3 },
+    },
+  },
 ];

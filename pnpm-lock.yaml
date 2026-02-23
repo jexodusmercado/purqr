@@ -9,59 +9,59 @@ importers:
   .:
     dependencies:
       jspdf:
-        specifier: ^4.2.0
+        specifier: 4.2.0
         version: 4.2.0
       next:
-        specifier: ^16.1.6
+        specifier: 16.1.6
         version: 16.1.6(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       qr-code-styling:
-        specifier: ^1.9.2
+        specifier: 1.9.2
         version: 1.9.2
       react:
-        specifier: ^19.0.0
+        specifier: 19.2.4
         version: 19.2.4
       react-dom:
-        specifier: ^19.0.0
+        specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
       zustand:
-        specifier: ^5.0.11
+        specifier: 5.0.11
         version: 5.0.11(@types/react@19.2.14)(react@19.2.4)
     devDependencies:
       '@types/jsdom':
-        specifier: ^27.0.0
+        specifier: 27.0.0
         version: 27.0.0
       '@types/node':
-        specifier: ^22
+        specifier: 22.19.11
         version: 22.19.11
       '@types/react':
-        specifier: ^19
+        specifier: 19.2.14
         version: 19.2.14
       '@types/react-dom':
-        specifier: ^19
+        specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.14)
       autoprefixer:
-        specifier: ^10.4.24
+        specifier: 10.4.24
         version: 10.4.24(postcss@8.5.6)
       eslint:
-        specifier: ^9
+        specifier: 9.39.3
         version: 9.39.3(jiti@1.21.7)
       eslint-config-next:
-        specifier: ^16.1.6
+        specifier: 16.1.6
         version: 16.1.6(@typescript-eslint/parser@8.56.0(eslint@9.39.3(jiti@1.21.7))(typescript@5.9.3))(eslint@9.39.3(jiti@1.21.7))(typescript@5.9.3)
       jsdom:
-        specifier: ^28.1.0
+        specifier: 28.1.0
         version: 28.1.0
       postcss:
-        specifier: ^8
+        specifier: 8.5.6
         version: 8.5.6
       tailwindcss:
-        specifier: ^3.4.1
+        specifier: 3.4.19
         version: 3.4.19
       typescript:
-        specifier: ^5
+        specifier: 5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^4.0.18
+        specifier: 4.0.18
         version: 4.0.18(@types/node@22.19.11)(jiti@1.21.7)(jsdom@28.1.0)
 
 packages:
