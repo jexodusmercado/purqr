@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQrStore } from '../../stores/qr-store';
 import {
   buildLibraryOptions,
@@ -14,6 +14,7 @@ export function QrPreview() {
   const containerRef = useRef<HTMLDivElement>(null);
   const instanceRef = useRef<any>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [renderError, setRenderError] = useState<string | null>(null);
 
   const store = useQrStore();
 
@@ -43,18 +44,26 @@ export function QrPreview() {
           containerRef.current.innerHTML = '';
           instanceRef.current = null;
         }
+        setRenderError(null);
         return;
       }
 
-      const options = buildLibraryOptions(store, PREVIEW_SIZE);
+      try {
+        const options = buildLibraryOptions(store, PREVIEW_SIZE);
 
-      if (!instanceRef.current) {
-        instanceRef.current = await createQrInstance(
-          containerRef.current,
-          options
-        );
-      } else {
-        await updateQrInstance(instanceRef.current, options);
+        if (!instanceRef.current) {
+          instanceRef.current = await createQrInstance(
+            containerRef.current,
+            options
+          );
+        } else {
+          await updateQrInstance(instanceRef.current, options);
+        }
+        setRenderError(null);
+      } catch {
+        containerRef.current.innerHTML = '';
+        instanceRef.current = null;
+        setRenderError('Preview failed. Check your logo URL or try again.');
       }
     }, 300);
 
@@ -101,9 +110,17 @@ export function QrPreview() {
         style={{ width: `${PREVIEW_SIZE}px`, height: `${PREVIEW_SIZE}px` }}
         className="absolute inset-0"
       />
-      {!data && (
+      {!data && !renderError && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded text-center text-sm text-gray-500 px-4">
           Enter a URL to generate a QR code
+        </div>
+      )}
+      {renderError && (
+        <div
+          role="alert"
+          className="absolute inset-0 flex items-center justify-center bg-red-50 rounded text-center text-sm text-red-600 px-4"
+        >
+          {renderError}
         </div>
       )}
     </div>
