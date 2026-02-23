@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { QrConfig, DownloadSize, DotType, CornerSquareType, CornerDotType } from '../types/qr-options';
+import type { QrConfig, DownloadSize, DotType, CornerSquareType, CornerDotType, GradientOptions } from '../types/qr-options';
 
 const DEFAULT_STATE: QrConfig = {
   data: '',
@@ -20,6 +20,7 @@ type QrStore = QrConfig & {
   setDownloadSize: (size: DownloadSize) => void;
   setDotType: (type: DotType) => void;
   setDotColor: (color: string) => void;
+  setDotGradient: (gradient: GradientOptions | undefined) => void;
   setCornerSquareType: (type: CornerSquareType) => void;
   setCornerSquareColor: (color: string) => void;
   setCornerDotType: (type: CornerDotType) => void;
@@ -40,6 +41,8 @@ export const useQrStore = create<QrStore>((set, get) => ({
   setDotType: (type: DotType) => set({ dotType: type }),
 
   setDotColor: (color: string) => set({ dotColor: color }),
+
+  setDotGradient: (gradient: GradientOptions | undefined) => set({ dotGradient: gradient }),
 
   setCornerSquareType: (type: CornerSquareType) => set({ cornerSquareType: type }),
 

@@ -3,7 +3,7 @@
 import { useQrStore } from '../../stores/qr-store';
 import { Select } from '../ui/Select';
 import { Input } from '../ui/Input';
-import type { DotType, CornerSquareType, CornerDotType } from '../../types/qr-options';
+import type { DotType, CornerSquareType, CornerDotType, GradientOptions } from '../../types/qr-options';
 
 const DOT_TYPE_OPTIONS: { value: string; label: string }[] = [
   { value: 'square', label: 'Square' },
@@ -23,6 +23,11 @@ const CORNER_SQUARE_TYPE_OPTIONS: { value: string; label: string }[] = [
 const CORNER_DOT_TYPE_OPTIONS: { value: string; label: string }[] = [
   { value: 'square', label: 'Square' },
   { value: 'dot', label: 'Dot' },
+];
+
+const GRADIENT_TYPE_OPTIONS: { value: string; label: string }[] = [
+  { value: 'linear', label: 'Linear' },
+  { value: 'radial', label: 'Radial' },
 ];
 
 interface ColorFieldProps {
@@ -52,8 +57,44 @@ function ColorField({ label, value, onChange }: ColorFieldProps) {
   );
 }
 
+const DEFAULT_GRADIENT: GradientOptions = {
+  type: 'linear',
+  rotation: 0,
+  colorStops: [
+    { offset: 0, color: '#000000' },
+    { offset: 1, color: '#666666' },
+  ],
+};
+
 export function StylePanel() {
   const store = useQrStore();
+  const gradientEnabled = store.dotGradient !== undefined;
+
+  function handleGradientToggle(enabled: boolean) {
+    if (enabled) {
+      store.setDotGradient({ ...DEFAULT_GRADIENT });
+    } else {
+      store.setDotGradient(undefined);
+    }
+  }
+
+  function handleGradientType(type: 'linear' | 'radial') {
+    if (!store.dotGradient) return;
+    store.setDotGradient({ ...store.dotGradient, type });
+  }
+
+  function handleGradientRotation(rotation: number) {
+    if (!store.dotGradient) return;
+    store.setDotGradient({ ...store.dotGradient, rotation });
+  }
+
+  function handleGradientColorStop(index: 0 | 1, color: string) {
+    if (!store.dotGradient) return;
+    const colorStops = store.dotGradient.colorStops.map((stop, i) =>
+      i === index ? { ...stop, color } : stop
+    );
+    store.setDotGradient({ ...store.dotGradient, colorStops });
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -63,11 +104,67 @@ export function StylePanel() {
         value={store.dotType}
         onChange={(e) => store.setDotType(e.target.value as DotType)}
       />
-      <ColorField
-        label="Dot Color"
-        value={store.dotColor}
-        onChange={store.setDotColor}
-      />
+
+      {!gradientEnabled && (
+        <ColorField
+          label="Dot Color"
+          value={store.dotColor}
+          onChange={store.setDotColor}
+        />
+      )}
+
+      <div className="flex flex-col gap-3">
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={gradientEnabled}
+            onChange={(e) => handleGradientToggle(e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-blue-600"
+          />
+          <span className="text-sm font-medium text-gray-700">Use Gradient for Dots</span>
+        </label>
+
+        {gradientEnabled && store.dotGradient && (
+          <div className="ml-6 flex flex-col gap-3 border-l-2 border-blue-100 pl-4">
+            <Select
+              label="Gradient Type"
+              options={GRADIENT_TYPE_OPTIONS}
+              value={store.dotGradient.type}
+              onChange={(e) => handleGradientType(e.target.value as 'linear' | 'radial')}
+            />
+            <div className="flex flex-col gap-1">
+              <label htmlFor="gradient-rotation" className="text-sm font-medium text-gray-700">
+                Rotation (0–360°)
+              </label>
+              <div className="flex items-center gap-3">
+                <input
+                  id="gradient-rotation"
+                  type="range"
+                  min={0}
+                  max={360}
+                  value={store.dotGradient.rotation}
+                  onChange={(e) => handleGradientRotation(Number(e.target.value))}
+                  className="flex-1"
+                />
+                <span className="w-12 text-right font-mono text-sm text-gray-500">
+                  {store.dotGradient.rotation}°
+                </span>
+              </div>
+            </div>
+            <ColorField
+              label="Gradient Start Color"
+              value={store.dotGradient.colorStops[0].color}
+              onChange={(color) => handleGradientColorStop(0, color)}
+            />
+            <ColorField
+              label="Gradient End Color"
+              value={store.dotGradient.colorStops[1].color}
+              onChange={(color) => handleGradientColorStop(1, color)}
+            />
+          </div>
+        )}
+      </div>
+
       <Select
         label="Corner Square Style"
         options={CORNER_SQUARE_TYPE_OPTIONS}
