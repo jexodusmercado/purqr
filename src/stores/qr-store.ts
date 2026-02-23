@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { QrConfig, DownloadSize } from '../types/qr-options';
+import type { QrConfig, DownloadSize, DotType, CornerSquareType, CornerDotType } from '../types/qr-options';
 
 const DEFAULT_STATE: QrConfig = {
   data: '',
@@ -18,6 +18,13 @@ const DEFAULT_STATE: QrConfig = {
 type QrStore = QrConfig & {
   setData: (value: string) => void;
   setDownloadSize: (size: DownloadSize) => void;
+  setDotType: (type: DotType) => void;
+  setDotColor: (color: string) => void;
+  setCornerSquareType: (type: CornerSquareType) => void;
+  setCornerSquareColor: (color: string) => void;
+  setCornerDotType: (type: CornerDotType) => void;
+  setCornerDotColor: (color: string) => void;
+  setBackgroundColor: (color: string) => void;
   resetToDefaults: () => void;
   buildQrOptions: (size?: number) => object;
 };
@@ -28,6 +35,20 @@ export const useQrStore = create<QrStore>((set, get) => ({
   setData: (value: string) => set({ data: value }),
 
   setDownloadSize: (size: DownloadSize) => set({ downloadSize: size }),
+
+  setDotType: (type: DotType) => set({ dotType: type }),
+
+  setDotColor: (color: string) => set({ dotColor: color }),
+
+  setCornerSquareType: (type: CornerSquareType) => set({ cornerSquareType: type }),
+
+  setCornerSquareColor: (color: string) => set({ cornerSquareColor: color }),
+
+  setCornerDotType: (type: CornerDotType) => set({ cornerDotType: type }),
+
+  setCornerDotColor: (color: string) => set({ cornerDotColor: color }),
+
+  setBackgroundColor: (color: string) => set({ backgroundColor: color }),
 
   resetToDefaults: () => set({ ...DEFAULT_STATE }),
 
