@@ -29,6 +29,7 @@ export function QrPreview() {
     cornerDotColor,
     backgroundColor,
     logoUrl,
+    errorCorrectionLevel,
   } = store;
 
   useEffect(() => {
@@ -84,6 +85,7 @@ export function QrPreview() {
     cornerDotColor,
     backgroundColor,
     logoUrl,
+    errorCorrectionLevel,
   ]);
 
   // Cleanup on unmount
