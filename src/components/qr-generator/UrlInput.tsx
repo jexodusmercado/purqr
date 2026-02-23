@@ -6,18 +6,16 @@ import { useQrStore } from '../../stores/qr-store';
 import { validateUrl } from '../../lib/url-validator';
 
 export function UrlInput() {
+  const data = useQrStore((s) => s.data);
   const setData = useQrStore((s) => s.setData);
-  const [localValue, setLocalValue] = useState('');
   const [helperText, setHelperText] = useState('');
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    setLocalValue(value);
-    setData(value);
+    setData(e.target.value);
   }
 
   function handleBlur() {
-    const { message } = validateUrl(localValue);
+    const { message } = validateUrl(data);
     setHelperText(message);
   }
 
@@ -25,7 +23,7 @@ export function UrlInput() {
     <Input
       label="URL"
       placeholder="https://example.com"
-      value={localValue}
+      value={data}
       onChange={handleChange}
       onBlur={handleBlur}
       helperText={helperText}
