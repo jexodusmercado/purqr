@@ -1,10 +1,23 @@
+const DANGEROUS_SCHEMES = ['javascript:', 'data:', 'vbscript:', 'file:'];
+
 export function validateUrl(input: string): { isValid: boolean; message: string } {
-  if (input.trim() === '') {
+  // Strip leading whitespace and null bytes before any other check
+  const cleaned = input.replace(/^[\s\0]+/, '');
+
+  if (cleaned === '') {
     return { isValid: false, message: '' };
   }
 
+  // Block dangerous URI schemes (case-insensitive)
+  const lower = cleaned.toLowerCase();
+  for (const scheme of DANGEROUS_SCHEMES) {
+    if (lower.startsWith(scheme)) {
+      return { isValid: false, message: 'This URL scheme is not allowed.' };
+    }
+  }
+
   try {
-    new URL(input);
+    new URL(cleaned);
     return { isValid: true, message: '' };
   } catch {
     return {

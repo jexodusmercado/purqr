@@ -45,4 +45,62 @@ describe('validateUrl', () => {
     const second = validateUrl('https://example.com');
     expect(first).toEqual(second);
   });
+
+  describe('dangerous URI scheme blocking', () => {
+    it('blocks javascript: scheme', () => {
+      expect(validateUrl('javascript:alert(1)')).toEqual({
+        isValid: false,
+        message: 'This URL scheme is not allowed.',
+      });
+    });
+
+    it('blocks javascript: scheme case-insensitively', () => {
+      expect(validateUrl('JAVASCRIPT:alert(1)')).toEqual({
+        isValid: false,
+        message: 'This URL scheme is not allowed.',
+      });
+    });
+
+    it('blocks javascript: with leading whitespace', () => {
+      expect(validateUrl('  javascript:alert(1)')).toEqual({
+        isValid: false,
+        message: 'This URL scheme is not allowed.',
+      });
+    });
+
+    it('blocks javascript: with leading null byte', () => {
+      expect(validateUrl('\0javascript:alert(1)')).toEqual({
+        isValid: false,
+        message: 'This URL scheme is not allowed.',
+      });
+    });
+
+    it('blocks data: scheme', () => {
+      const result = validateUrl('data:text/html,<script>alert(1)</script>');
+      expect(result.isValid).toBe(false);
+      expect(result.message).toBe('This URL scheme is not allowed.');
+    });
+
+    it('blocks vbscript: scheme', () => {
+      expect(validateUrl('vbscript:MsgBox(1)')).toEqual({
+        isValid: false,
+        message: 'This URL scheme is not allowed.',
+      });
+    });
+
+    it('blocks file: scheme', () => {
+      expect(validateUrl('file:///etc/passwd')).toEqual({
+        isValid: false,
+        message: 'This URL scheme is not allowed.',
+      });
+    });
+
+    it('still allows https:// (not blocked)', () => {
+      expect(validateUrl('https://example.com')).toEqual({ isValid: true, message: '' });
+    });
+
+    it('still allows http:// (not blocked)', () => {
+      expect(validateUrl('http://example.com')).toEqual({ isValid: true, message: '' });
+    });
+  });
 });

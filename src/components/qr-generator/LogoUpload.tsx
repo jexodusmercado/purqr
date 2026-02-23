@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { useQrStore } from '../../stores/qr-store';
+import { sanitizeImage } from '../../lib/image-sanitizer';
 
 const ACCEPTED_MIME_TYPES = [
   'image/png',
@@ -12,15 +13,6 @@ const ACCEPTED_MIME_TYPES = [
 ];
 
 const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024; // 2 MB
-
-function readFileAsDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    reader.readAsDataURL(file);
-  });
-}
 
 export function LogoUpload() {
   const store = useQrStore();
@@ -42,14 +34,15 @@ export function LogoUpload() {
       return;
     }
 
-    try {
-      const dataUrl = await readFileAsDataUrl(file);
-      store.setLogo(dataUrl);
-      store.setErrorCorrectionLevel('H');
-      setFilename(file.name);
-    } catch {
-      setError('Failed to read file. Please try again.');
+    const result = await sanitizeImage(file);
+    if (!result.sanitized) {
+      setError(result.error ?? 'File could not be processed. Please try a different image.');
+      return;
     }
+
+    store.setLogo(result.dataUrl);
+    store.setErrorCorrectionLevel('H');
+    setFilename(file.name);
   }
 
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {

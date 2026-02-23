@@ -1,5 +1,6 @@
 import type { QrConfig } from '../types/qr-options';
 import { buildLibraryOptions } from './qr-engine';
+import { sanitizeFilename } from './sanitize-filename';
 
 function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -31,5 +32,5 @@ export async function exportPdf(config: QrConfig): Promise<void> {
   });
 
   doc.addImage(dataUrl, 'PNG', 0, 0, sizeMm, sizeMm);
-  doc.save('qr-code.pdf');
+  doc.save(sanitizeFilename('qr-code', 'pdf'));
 }
