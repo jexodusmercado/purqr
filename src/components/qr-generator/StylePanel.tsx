@@ -2,7 +2,7 @@
 
 import { useQrStore } from '../../stores/qr-store';
 import { Select } from '../ui/Select';
-import { Input } from '../ui/Input';
+import { LogoUpload } from './LogoUpload';
 import type { DotType, CornerSquareType, CornerDotType, GradientOptions, ErrorCorrectionLevel } from '../../types/qr-options';
 
 const DOT_TYPE_OPTIONS: { value: string; label: string }[] = [
@@ -199,14 +199,7 @@ export function StylePanel() {
         value={store.backgroundColor}
         onChange={store.setBackgroundColor}
       />
-      <Input
-        label="Logo URL (optional)"
-        type="url"
-        placeholder="https://example.com/logo.png"
-        value={store.logoUrl ?? ''}
-        onChange={(e) => store.setLogoUrl(e.target.value || undefined)}
-        helperText="Enter a publicly accessible image URL to embed as a logo"
-      />
+      <LogoUpload />
       <Select
         label="Error Correction Level"
         options={ERROR_CORRECTION_OPTIONS}

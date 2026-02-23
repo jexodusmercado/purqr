@@ -29,7 +29,7 @@ export type QrConfig = {
   cornerDotType: CornerDotType;
   cornerDotColor: string;
   backgroundColor: string;
-  logoUrl?: string;
+  logo?: string;
   errorCorrectionLevel: ErrorCorrectionLevel;
 };
 

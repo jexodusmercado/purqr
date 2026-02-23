@@ -27,7 +27,7 @@ export function buildLibraryOptions(state: QrConfig, size?: number): object {
     backgroundOptions: {
       color: state.backgroundColor,
     },
-    ...(state.logoUrl ? { image: state.logoUrl } : {}),
+    ...(state.logo ? { image: state.logo } : {}),
   };
 }
 

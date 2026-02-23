@@ -30,7 +30,7 @@ export function DownloadPanel() {
     cornerDotType: store.cornerDotType,
     cornerDotColor: store.cornerDotColor,
     backgroundColor: store.backgroundColor,
-    logoUrl: store.logoUrl,
+    logo: store.logo,
     errorCorrectionLevel: store.errorCorrectionLevel,
   };
 

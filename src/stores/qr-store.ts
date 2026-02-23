@@ -13,7 +13,7 @@ const DEFAULT_STATE: QrConfig = {
   cornerDotType: 'square',
   cornerDotColor: '#000000',
   backgroundColor: '#ffffff',
-  logoUrl: undefined,
+  logo: undefined,
   errorCorrectionLevel: 'Q',
 };
 
@@ -28,7 +28,7 @@ type QrStore = QrConfig & {
   setCornerDotType: (type: CornerDotType) => void;
   setCornerDotColor: (color: string) => void;
   setBackgroundColor: (color: string) => void;
-  setLogoUrl: (url: string | undefined) => void;
+  setLogo: (dataUrl: string | undefined) => void;
   setErrorCorrectionLevel: (level: ErrorCorrectionLevel) => void;
   resetToDefaults: () => void;
 };
@@ -58,7 +58,7 @@ export const useQrStore = create<QrStore>()(
 
       setBackgroundColor: (color: string) => set({ backgroundColor: color }),
 
-      setLogoUrl: (url: string | undefined) => set({ logoUrl: url }),
+      setLogo: (dataUrl: string | undefined) => set({ logo: dataUrl }),
 
       setErrorCorrectionLevel: (level: ErrorCorrectionLevel) => set({ errorCorrectionLevel: level }),
 
@@ -90,7 +90,7 @@ export const useQrStore = create<QrStore>()(
         cornerDotType: state.cornerDotType,
         cornerDotColor: state.cornerDotColor,
         backgroundColor: state.backgroundColor,
-        logoUrl: state.logoUrl,
+        logo: state.logo,
         errorCorrectionLevel: state.errorCorrectionLevel,
       }),
     }

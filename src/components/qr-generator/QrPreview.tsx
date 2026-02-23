@@ -28,7 +28,7 @@ export function QrPreview() {
     cornerDotType,
     cornerDotColor,
     backgroundColor,
-    logoUrl,
+    logo,
     errorCorrectionLevel,
   } = store;
 
@@ -64,7 +64,7 @@ export function QrPreview() {
       } catch {
         containerRef.current.innerHTML = '';
         instanceRef.current = null;
-        setRenderError('Preview failed. Check your logo URL or try again.');
+        setRenderError('Preview failed. Check your logo or try again.');
       }
     }, 300);
 
@@ -84,7 +84,7 @@ export function QrPreview() {
     cornerDotType,
     cornerDotColor,
     backgroundColor,
-    logoUrl,
+    logo,
     errorCorrectionLevel,
   ]);
 

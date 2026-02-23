@@ -47,8 +47,8 @@ describe('useQrStore — initial state', () => {
     expect(useQrStore.getState().backgroundColor).toBe('#ffffff');
   });
 
-  it('logoUrl defaults to undefined', () => {
-    expect(useQrStore.getState().logoUrl).toBeUndefined();
+  it('logo defaults to undefined', () => {
+    expect(useQrStore.getState().logo).toBeUndefined();
   });
 
   it('errorCorrectionLevel defaults to Q', () => {
@@ -121,15 +121,15 @@ describe('useQrStore — setters', () => {
     expect(useQrStore.getState().backgroundColor).toBe('#f0f0f0');
   });
 
-  it('setLogoUrl updates logoUrl', () => {
-    useQrStore.getState().setLogoUrl('https://example.com/logo.png');
-    expect(useQrStore.getState().logoUrl).toBe('https://example.com/logo.png');
+  it('setLogo updates logo', () => {
+    useQrStore.getState().setLogo('data:image/png;base64,abc123');
+    expect(useQrStore.getState().logo).toBe('data:image/png;base64,abc123');
   });
 
-  it('setLogoUrl can clear to undefined', () => {
-    useQrStore.getState().setLogoUrl('https://example.com/logo.png');
-    useQrStore.getState().setLogoUrl(undefined);
-    expect(useQrStore.getState().logoUrl).toBeUndefined();
+  it('setLogo can clear to undefined', () => {
+    useQrStore.getState().setLogo('data:image/png;base64,abc123');
+    useQrStore.getState().setLogo(undefined);
+    expect(useQrStore.getState().logo).toBeUndefined();
   });
 
   it('setErrorCorrectionLevel updates errorCorrectionLevel', () => {
@@ -161,7 +161,7 @@ describe('useQrStore — resetToDefaults', () => {
     store.setDotColor('#ff0000');
     store.setCornerSquareType('extra-rounded');
     store.setBackgroundColor('#cccccc');
-    store.setLogoUrl('https://example.com/logo.png');
+    store.setLogo('data:image/png;base64,abc123');
 
     store.resetToDefaults();
     const state = useQrStore.getState();
@@ -176,7 +176,7 @@ describe('useQrStore — resetToDefaults', () => {
     expect(state.cornerDotType).toBe('square');
     expect(state.cornerDotColor).toBe('#000000');
     expect(state.backgroundColor).toBe('#ffffff');
-    expect(state.logoUrl).toBeUndefined();
+    expect(state.logo).toBeUndefined();
     expect(state.errorCorrectionLevel).toBe('Q');
   });
 });

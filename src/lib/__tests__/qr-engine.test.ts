@@ -13,7 +13,7 @@ const BASE_CONFIG: QrConfig = {
   cornerDotType: 'square',
   cornerDotColor: '#000000',
   backgroundColor: '#ffffff',
-  logoUrl: undefined,
+  logo: undefined,
   errorCorrectionLevel: 'Q',
 };
 
@@ -62,15 +62,15 @@ describe('buildLibraryOptions', () => {
     expect(bg.color).toBe('#ffffff');
   });
 
-  it('omits image key when logoUrl is undefined', () => {
+  it('omits image key when logo is undefined', () => {
     const opts = buildLibraryOptions(BASE_CONFIG) as Record<string, unknown>;
     expect('image' in opts).toBe(false);
   });
 
-  it('includes image key when logoUrl is set', () => {
-    const config: QrConfig = { ...BASE_CONFIG, logoUrl: 'https://example.com/logo.png' };
+  it('includes image key when logo is set', () => {
+    const config: QrConfig = { ...BASE_CONFIG, logo: 'data:image/png;base64,abc123' };
     const opts = buildLibraryOptions(config) as Record<string, unknown>;
-    expect(opts.image).toBe('https://example.com/logo.png');
+    expect(opts.image).toBe('data:image/png;base64,abc123');
   });
 
   it('omits gradient when dotGradient is undefined', () => {
