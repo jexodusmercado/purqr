@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Input } from '../ui/Input';
 import { useQrStore } from '../../stores/qr-store';
 import { validateUrl } from '../../lib/url-validator';
@@ -10,13 +10,11 @@ export function UrlInput() {
   const [localValue, setLocalValue] = useState('');
   const [helperText, setHelperText] = useState('');
 
-  // Debounce store update 300ms after user stops typing
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setData(localValue);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [localValue, setData]);
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setLocalValue(value);
+    setData(value);
+  }
 
   function handleBlur() {
     const { message } = validateUrl(localValue);
@@ -28,7 +26,7 @@ export function UrlInput() {
       label="URL"
       placeholder="https://example.com"
       value={localValue}
-      onChange={(e) => setLocalValue(e.target.value)}
+      onChange={handleChange}
       onBlur={handleBlur}
       helperText={helperText}
     />
