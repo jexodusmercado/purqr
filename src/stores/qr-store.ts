@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { QrConfig, DownloadSize, DotType, CornerSquareType, CornerDotType, GradientOptions } from '../types/qr-options';
+import type { QrConfig, DownloadSize, DotType, CornerSquareType, CornerDotType, GradientOptions, ErrorCorrectionLevel } from '../types/qr-options';
 
 const DEFAULT_STATE: QrConfig = {
   data: '',
@@ -14,6 +14,7 @@ const DEFAULT_STATE: QrConfig = {
   cornerDotColor: '#000000',
   backgroundColor: '#ffffff',
   logoUrl: undefined,
+  errorCorrectionLevel: 'Q',
 };
 
 type QrStore = QrConfig & {
@@ -28,6 +29,7 @@ type QrStore = QrConfig & {
   setCornerDotColor: (color: string) => void;
   setBackgroundColor: (color: string) => void;
   setLogoUrl: (url: string | undefined) => void;
+  setErrorCorrectionLevel: (level: ErrorCorrectionLevel) => void;
   resetToDefaults: () => void;
 };
 
@@ -58,6 +60,8 @@ export const useQrStore = create<QrStore>()(
 
       setLogoUrl: (url: string | undefined) => set({ logoUrl: url }),
 
+      setErrorCorrectionLevel: (level: ErrorCorrectionLevel) => set({ errorCorrectionLevel: level }),
+
       resetToDefaults: () => set({ ...DEFAULT_STATE }),
     }),
     {
@@ -87,6 +91,7 @@ export const useQrStore = create<QrStore>()(
         cornerDotColor: state.cornerDotColor,
         backgroundColor: state.backgroundColor,
         logoUrl: state.logoUrl,
+        errorCorrectionLevel: state.errorCorrectionLevel,
       }),
     }
   )

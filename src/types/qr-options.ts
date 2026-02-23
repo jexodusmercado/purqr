@@ -10,6 +10,8 @@ export type CornerSquareType = 'dot' | 'square' | 'extra-rounded';
 
 export type CornerDotType = 'dot' | 'square';
 
+export type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
+
 export type GradientOptions = {
   type: 'linear' | 'radial';
   rotation: number;
@@ -28,6 +30,7 @@ export type QrConfig = {
   cornerDotColor: string;
   backgroundColor: string;
   logoUrl?: string;
+  errorCorrectionLevel: ErrorCorrectionLevel;
 };
 
 export type DownloadFormat = 'png' | 'svg' | 'pdf';

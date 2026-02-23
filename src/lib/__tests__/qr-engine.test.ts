@@ -14,6 +14,7 @@ const BASE_CONFIG: QrConfig = {
   cornerDotColor: '#000000',
   backgroundColor: '#ffffff',
   logoUrl: undefined,
+  errorCorrectionLevel: 'Q',
 };
 
 describe('buildLibraryOptions', () => {
@@ -109,6 +110,22 @@ describe('buildLibraryOptions', () => {
       const opts = buildLibraryOptions(config) as Record<string, unknown>;
       expect(opts.width).toBe(size);
       expect(opts.height).toBe(size);
+    }
+  });
+
+  it('maps errorCorrectionLevel into qrOptions', () => {
+    const opts = buildLibraryOptions(BASE_CONFIG) as Record<string, unknown>;
+    const qrOpts = opts.qrOptions as Record<string, unknown>;
+    expect(qrOpts.errorCorrectionLevel).toBe('Q');
+  });
+
+  it('reflects all errorCorrectionLevel values correctly', () => {
+    const levels = ['L', 'M', 'Q', 'H'] as const;
+    for (const level of levels) {
+      const config: QrConfig = { ...BASE_CONFIG, errorCorrectionLevel: level };
+      const opts = buildLibraryOptions(config) as Record<string, unknown>;
+      const qrOpts = opts.qrOptions as Record<string, unknown>;
+      expect(qrOpts.errorCorrectionLevel).toBe(level);
     }
   });
 });

@@ -3,7 +3,7 @@
 import { useQrStore } from '../../stores/qr-store';
 import { Select } from '../ui/Select';
 import { Input } from '../ui/Input';
-import type { DotType, CornerSquareType, CornerDotType, GradientOptions } from '../../types/qr-options';
+import type { DotType, CornerSquareType, CornerDotType, GradientOptions, ErrorCorrectionLevel } from '../../types/qr-options';
 
 const DOT_TYPE_OPTIONS: { value: string; label: string }[] = [
   { value: 'square', label: 'Square' },
@@ -28,6 +28,13 @@ const CORNER_DOT_TYPE_OPTIONS: { value: string; label: string }[] = [
 const GRADIENT_TYPE_OPTIONS: { value: string; label: string }[] = [
   { value: 'linear', label: 'Linear' },
   { value: 'radial', label: 'Radial' },
+];
+
+const ERROR_CORRECTION_OPTIONS: { value: string; label: string }[] = [
+  { value: 'L', label: 'L — Low (7% recovery)' },
+  { value: 'M', label: 'M — Medium (15% recovery)' },
+  { value: 'Q', label: 'Q — Quartile (25% recovery)' },
+  { value: 'H', label: 'H — High (30% recovery, use with logo)' },
 ];
 
 interface ColorFieldProps {
@@ -199,6 +206,12 @@ export function StylePanel() {
         value={store.logoUrl ?? ''}
         onChange={(e) => store.setLogoUrl(e.target.value || undefined)}
         helperText="Enter a publicly accessible image URL to embed as a logo"
+      />
+      <Select
+        label="Error Correction Level"
+        options={ERROR_CORRECTION_OPTIONS}
+        value={store.errorCorrectionLevel}
+        onChange={(e) => store.setErrorCorrectionLevel(e.target.value as ErrorCorrectionLevel)}
       />
     </div>
   );

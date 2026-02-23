@@ -8,6 +8,9 @@ export function buildLibraryOptions(state: QrConfig, size?: number): object {
     data: state.data,
     width: resolvedSize,
     height: resolvedSize,
+    qrOptions: {
+      errorCorrectionLevel: state.errorCorrectionLevel,
+    },
     dotsOptions: {
       type: state.dotType,
       color: state.dotColor,

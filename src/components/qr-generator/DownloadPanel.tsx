@@ -29,6 +29,7 @@ export function DownloadPanel() {
     cornerDotColor: store.cornerDotColor,
     backgroundColor: store.backgroundColor,
     logoUrl: store.logoUrl,
+    errorCorrectionLevel: store.errorCorrectionLevel,
   };
 
   async function handleExport(

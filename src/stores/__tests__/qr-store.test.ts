@@ -50,6 +50,10 @@ describe('useQrStore — initial state', () => {
   it('logoUrl defaults to undefined', () => {
     expect(useQrStore.getState().logoUrl).toBeUndefined();
   });
+
+  it('errorCorrectionLevel defaults to Q', () => {
+    expect(useQrStore.getState().errorCorrectionLevel).toBe('Q');
+  });
 });
 
 describe('useQrStore — setters', () => {
@@ -127,6 +131,19 @@ describe('useQrStore — setters', () => {
     useQrStore.getState().setLogoUrl(undefined);
     expect(useQrStore.getState().logoUrl).toBeUndefined();
   });
+
+  it('setErrorCorrectionLevel updates errorCorrectionLevel', () => {
+    useQrStore.getState().setErrorCorrectionLevel('H');
+    expect(useQrStore.getState().errorCorrectionLevel).toBe('H');
+  });
+
+  it('setErrorCorrectionLevel accepts all valid levels', () => {
+    const levels = ['L', 'M', 'Q', 'H'] as const;
+    for (const level of levels) {
+      useQrStore.getState().setErrorCorrectionLevel(level);
+      expect(useQrStore.getState().errorCorrectionLevel).toBe(level);
+    }
+  });
 });
 
 describe('useQrStore — resetToDefaults', () => {
@@ -160,5 +177,6 @@ describe('useQrStore — resetToDefaults', () => {
     expect(state.cornerDotColor).toBe('#000000');
     expect(state.backgroundColor).toBe('#ffffff');
     expect(state.logoUrl).toBeUndefined();
+    expect(state.errorCorrectionLevel).toBe('Q');
   });
 });
