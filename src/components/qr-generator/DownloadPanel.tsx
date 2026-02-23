@@ -11,28 +11,23 @@ import type { QrConfig } from '../../types/qr-options';
 
 type LoadingState = { png: boolean; svg: boolean; pdf: boolean; copy: boolean };
 
+const QR_CONFIG_KEYS: (keyof QrConfig)[] = [
+  'data', 'downloadSize', 'dotType', 'dotColor', 'dotGradient',
+  'cornerSquareType', 'cornerSquareColor', 'cornerDotType', 'cornerDotColor',
+  'backgroundColor', 'logo', 'errorCorrectionLevel',
+  'cornerSquareGradient', 'cornerDotGradient', 'backgroundGradient',
+  'backgroundRound', 'shape', 'imageSize', 'imageMargin',
+  'hideBackgroundDots', 'shadow',
+];
+
 export function DownloadPanel() {
-  const store = useQrStore();
+  const config = useQrStore(
+    (s) => QR_CONFIG_KEYS.reduce((acc, k) => ({ ...acc, [k]: s[k] }), {} as QrConfig)
+  );
+  const isDisabled = config.data === '';
   const [loading, setLoading] = useState<LoadingState>({ png: false, svg: false, pdf: false, copy: false });
   const [exportError, setExportError] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
-
-  const isDisabled = store.data === '';
-
-  const config: QrConfig = {
-    data: store.data,
-    downloadSize: store.downloadSize,
-    dotType: store.dotType,
-    dotColor: store.dotColor,
-    dotGradient: store.dotGradient,
-    cornerSquareType: store.cornerSquareType,
-    cornerSquareColor: store.cornerSquareColor,
-    cornerDotType: store.cornerDotType,
-    cornerDotColor: store.cornerDotColor,
-    backgroundColor: store.backgroundColor,
-    logo: store.logo,
-    errorCorrectionLevel: store.errorCorrectionLevel,
-  };
 
   async function handleExport(
     format: keyof LoadingState,

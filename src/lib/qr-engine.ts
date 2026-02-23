@@ -8,6 +8,7 @@ export function buildLibraryOptions(state: QrConfig, size?: number): object {
     data: state.data,
     width: resolvedSize,
     height: resolvedSize,
+    shape: state.shape,
     qrOptions: {
       errorCorrectionLevel: state.errorCorrectionLevel,
     },
@@ -19,15 +20,26 @@ export function buildLibraryOptions(state: QrConfig, size?: number): object {
     cornersSquareOptions: {
       type: state.cornerSquareType,
       color: state.cornerSquareColor,
+      ...(state.cornerSquareGradient ? { gradient: state.cornerSquareGradient } : {}),
     },
     cornersDotOptions: {
       type: state.cornerDotType,
       color: state.cornerDotColor,
+      ...(state.cornerDotGradient ? { gradient: state.cornerDotGradient } : {}),
     },
     backgroundOptions: {
       color: state.backgroundColor,
+      round: state.backgroundRound,
+      ...(state.backgroundGradient ? { gradient: state.backgroundGradient } : {}),
     },
-    ...(state.logo ? { image: state.logo } : {}),
+    ...(state.logo ? {
+      image: state.logo,
+      imageOptions: {
+        imageSize: state.imageSize,
+        margin: state.imageMargin,
+        hideBackgroundDots: state.hideBackgroundDots,
+      },
+    } : {}),
   };
 }
 

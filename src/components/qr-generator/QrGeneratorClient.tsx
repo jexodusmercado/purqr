@@ -4,6 +4,7 @@ import { UrlInput } from './UrlInput';
 import { SizeSelector } from './SizeSelector';
 import { DownloadPanel } from './DownloadPanel';
 import { StylePanel } from './StylePanel';
+import { TemplatePanel } from './TemplatePanel';
 import { QrPreview } from './QrPreview';
 
 export function QrGeneratorClient() {
@@ -11,6 +12,7 @@ export function QrGeneratorClient() {
     <div className="md:grid md:grid-cols-2 md:gap-8">
       <div className="flex flex-col gap-6">
         <UrlInput />
+        <TemplatePanel />
         <StylePanel />
         <SizeSelector />
         <DownloadPanel />

@@ -7,6 +7,7 @@ import {
   createQrInstance,
   updateQrInstance,
 } from '../../lib/qr-engine';
+import { buildShadowExtension } from '../../lib/qr-extension';
 
 const PREVIEW_SIZE = 300;
 
@@ -30,6 +31,15 @@ export function QrPreview() {
     backgroundColor,
     logo,
     errorCorrectionLevel,
+    cornerSquareGradient,
+    cornerDotGradient,
+    backgroundGradient,
+    backgroundRound,
+    shape,
+    imageSize,
+    imageMargin,
+    hideBackgroundDots,
+    shadow,
   } = store;
 
   useEffect(() => {
@@ -50,7 +60,9 @@ export function QrPreview() {
       }
 
       try {
-        const options = buildLibraryOptions(store, PREVIEW_SIZE);
+        const baseOptions = buildLibraryOptions(store, PREVIEW_SIZE);
+        // Shadow requires SVG rendering so drop-shadow filters can be applied
+        const options = shadow.enabled ? { ...baseOptions, type: 'svg' } : baseOptions;
 
         if (!instanceRef.current) {
           instanceRef.current = await createQrInstance(
@@ -60,6 +72,15 @@ export function QrPreview() {
         } else {
           await updateQrInstance(instanceRef.current, options);
         }
+
+        // Apply or remove shadow extension after create/update
+        if (shadow.enabled) {
+          const ext = buildShadowExtension(shadow);
+          if (ext) instanceRef.current.applyExtension(ext);
+        } else {
+          instanceRef.current.deleteExtension();
+        }
+
         setRenderError(null);
       } catch {
         containerRef.current.innerHTML = '';
@@ -86,6 +107,15 @@ export function QrPreview() {
     backgroundColor,
     logo,
     errorCorrectionLevel,
+    cornerSquareGradient,
+    cornerDotGradient,
+    backgroundGradient,
+    backgroundRound,
+    shape,
+    imageSize,
+    imageMargin,
+    hideBackgroundDots,
+    shadow,
   ]);
 
   // Cleanup on unmount
