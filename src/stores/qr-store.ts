@@ -28,10 +28,9 @@ type QrStore = QrConfig & {
   setBackgroundColor: (color: string) => void;
   setLogoUrl: (url: string | undefined) => void;
   resetToDefaults: () => void;
-  buildQrOptions: (size?: number) => object;
 };
 
-export const useQrStore = create<QrStore>((set, get) => ({
+export const useQrStore = create<QrStore>((set) => ({
   ...DEFAULT_STATE,
 
   setData: (value: string) => set({ data: value }),
@@ -57,31 +56,4 @@ export const useQrStore = create<QrStore>((set, get) => ({
   setLogoUrl: (url: string | undefined) => set({ logoUrl: url }),
 
   resetToDefaults: () => set({ ...DEFAULT_STATE }),
-
-  buildQrOptions: (size?: number) => {
-    const state = get();
-    const resolvedSize = size ?? state.downloadSize;
-    return {
-      data: state.data,
-      width: resolvedSize,
-      height: resolvedSize,
-      dotsOptions: {
-        type: state.dotType,
-        color: state.dotColor,
-        ...(state.dotGradient ? { gradient: state.dotGradient } : {}),
-      },
-      cornersSquareOptions: {
-        type: state.cornerSquareType,
-        color: state.cornerSquareColor,
-      },
-      cornersDotOptions: {
-        type: state.cornerDotType,
-        color: state.cornerDotColor,
-      },
-      backgroundOptions: {
-        color: state.backgroundColor,
-      },
-      ...(state.logoUrl ? { image: state.logoUrl } : {}),
-    };
-  },
 }));
