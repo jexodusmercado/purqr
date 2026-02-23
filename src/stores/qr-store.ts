@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { QrConfig, DownloadSize, DotType, CornerSquareType, CornerDotType, GradientOptions } from '../types/qr-options';
 
 const DEFAULT_STATE: QrConfig = {
@@ -30,30 +31,63 @@ type QrStore = QrConfig & {
   resetToDefaults: () => void;
 };
 
-export const useQrStore = create<QrStore>((set) => ({
-  ...DEFAULT_STATE,
+export const useQrStore = create<QrStore>()(
+  persist(
+    (set) => ({
+      ...DEFAULT_STATE,
 
-  setData: (value: string) => set({ data: value }),
+      setData: (value: string) => set({ data: value }),
 
-  setDownloadSize: (size: DownloadSize) => set({ downloadSize: size }),
+      setDownloadSize: (size: DownloadSize) => set({ downloadSize: size }),
 
-  setDotType: (type: DotType) => set({ dotType: type }),
+      setDotType: (type: DotType) => set({ dotType: type }),
 
-  setDotColor: (color: string) => set({ dotColor: color }),
+      setDotColor: (color: string) => set({ dotColor: color }),
 
-  setDotGradient: (gradient: GradientOptions | undefined) => set({ dotGradient: gradient }),
+      setDotGradient: (gradient: GradientOptions | undefined) => set({ dotGradient: gradient }),
 
-  setCornerSquareType: (type: CornerSquareType) => set({ cornerSquareType: type }),
+      setCornerSquareType: (type: CornerSquareType) => set({ cornerSquareType: type }),
 
-  setCornerSquareColor: (color: string) => set({ cornerSquareColor: color }),
+      setCornerSquareColor: (color: string) => set({ cornerSquareColor: color }),
 
-  setCornerDotType: (type: CornerDotType) => set({ cornerDotType: type }),
+      setCornerDotType: (type: CornerDotType) => set({ cornerDotType: type }),
 
-  setCornerDotColor: (color: string) => set({ cornerDotColor: color }),
+      setCornerDotColor: (color: string) => set({ cornerDotColor: color }),
 
-  setBackgroundColor: (color: string) => set({ backgroundColor: color }),
+      setBackgroundColor: (color: string) => set({ backgroundColor: color }),
 
-  setLogoUrl: (url: string | undefined) => set({ logoUrl: url }),
+      setLogoUrl: (url: string | undefined) => set({ logoUrl: url }),
 
-  resetToDefaults: () => set({ ...DEFAULT_STATE }),
-}));
+      resetToDefaults: () => set({ ...DEFAULT_STATE }),
+    }),
+    {
+      name: 'purqr-config',
+      storage: createJSONStorage(() => {
+        // SSR and Node test environments don't have window/localStorage.
+        // Return a no-op storage so the store works correctly in both contexts.
+        if (typeof window === 'undefined') {
+          return {
+            getItem: () => null,
+            setItem: () => {},
+            removeItem: () => {},
+          };
+        }
+        return localStorage;
+      }),
+      // Persist only QrConfig data fields — action methods are not serializable.
+      partialize: (state) => ({
+        data: state.data,
+        downloadSize: state.downloadSize,
+        dotType: state.dotType,
+        dotColor: state.dotColor,
+        dotGradient: state.dotGradient,
+        cornerSquareType: state.cornerSquareType,
+        cornerSquareColor: state.cornerSquareColor,
+        cornerDotType: state.cornerDotType,
+        cornerDotColor: state.cornerDotColor,
+        backgroundColor: state.backgroundColor,
+        logoUrl: state.logoUrl,
+      }),
+    }
+  )
+);
