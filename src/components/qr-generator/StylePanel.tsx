@@ -2,6 +2,7 @@
 
 import { useQrStore } from '../../stores/qr-store';
 import { Select } from '../ui/Select';
+import { Input } from '../ui/Input';
 import type { DotType, CornerSquareType, CornerDotType } from '../../types/qr-options';
 
 const DOT_TYPE_OPTIONS: { value: string; label: string }[] = [
@@ -73,6 +74,11 @@ export function StylePanel() {
         value={store.cornerSquareType}
         onChange={(e) => store.setCornerSquareType(e.target.value as CornerSquareType)}
       />
+      <ColorField
+        label="Corner Square Color"
+        value={store.cornerSquareColor}
+        onChange={store.setCornerSquareColor}
+      />
       <Select
         label="Corner Dot Style"
         options={CORNER_DOT_TYPE_OPTIONS}
@@ -80,9 +86,22 @@ export function StylePanel() {
         onChange={(e) => store.setCornerDotType(e.target.value as CornerDotType)}
       />
       <ColorField
+        label="Corner Dot Color"
+        value={store.cornerDotColor}
+        onChange={store.setCornerDotColor}
+      />
+      <ColorField
         label="Background Color"
         value={store.backgroundColor}
         onChange={store.setBackgroundColor}
+      />
+      <Input
+        label="Logo URL (optional)"
+        type="url"
+        placeholder="https://example.com/logo.png"
+        value={store.logoUrl ?? ''}
+        onChange={(e) => store.setLogoUrl(e.target.value || undefined)}
+        helperText="Enter a publicly accessible image URL to embed as a logo"
       />
     </div>
   );

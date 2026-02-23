@@ -25,6 +25,7 @@ type QrStore = QrConfig & {
   setCornerDotType: (type: CornerDotType) => void;
   setCornerDotColor: (color: string) => void;
   setBackgroundColor: (color: string) => void;
+  setLogoUrl: (url: string | undefined) => void;
   resetToDefaults: () => void;
   buildQrOptions: (size?: number) => object;
 };
@@ -49,6 +50,8 @@ export const useQrStore = create<QrStore>((set, get) => ({
   setCornerDotColor: (color: string) => set({ cornerDotColor: color }),
 
   setBackgroundColor: (color: string) => set({ backgroundColor: color }),
+
+  setLogoUrl: (url: string | undefined) => set({ logoUrl: url }),
 
   resetToDefaults: () => set({ ...DEFAULT_STATE }),
 
