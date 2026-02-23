@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Button } from '../ui/Button';
 import { useQrStore } from '../../stores/qr-store';
 import { exportPng } from '../../lib/export-png';
@@ -22,7 +23,7 @@ const QR_CONFIG_KEYS: (keyof QrConfig)[] = [
 
 export function DownloadPanel() {
   const config = useQrStore(
-    (s) => QR_CONFIG_KEYS.reduce((acc, k) => ({ ...acc, [k]: s[k] }), {} as QrConfig)
+    useShallow((s) => QR_CONFIG_KEYS.reduce((acc, k) => ({ ...acc, [k]: s[k] }), {} as QrConfig))
   );
   const isDisabled = config.data === '';
   const [loading, setLoading] = useState<LoadingState>({ png: false, svg: false, pdf: false, copy: false });
