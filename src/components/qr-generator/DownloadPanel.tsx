@@ -13,6 +13,7 @@ type LoadingState = { png: boolean; svg: boolean; pdf: boolean };
 export function DownloadPanel() {
   const store = useQrStore();
   const [loading, setLoading] = useState<LoadingState>({ png: false, svg: false, pdf: false });
+  const [exportError, setExportError] = useState<string | null>(null);
 
   const isDisabled = store.data === '';
 
@@ -34,42 +35,48 @@ export function DownloadPanel() {
     format: keyof LoadingState,
     fn: (config: QrConfig) => Promise<void>,
   ) {
+    setExportError(null);
     setLoading((prev) => ({ ...prev, [format]: true }));
     try {
       await fn(config);
     } catch {
-      // Swallow export errors — no unhandled promise rejections
+      setExportError(`${format.toUpperCase()} export failed. Please try again.`);
     } finally {
       setLoading((prev) => ({ ...prev, [format]: false }));
     }
   }
 
   return (
-    <div className="flex gap-3">
-      <Button
-        variant="primary"
-        loading={loading.png}
-        disabled={isDisabled}
-        onClick={() => handleExport('png', exportPng)}
-      >
-        PNG
-      </Button>
-      <Button
-        variant="primary"
-        loading={loading.svg}
-        disabled={isDisabled}
-        onClick={() => handleExport('svg', exportSvg)}
-      >
-        SVG
-      </Button>
-      <Button
-        variant="primary"
-        loading={loading.pdf}
-        disabled={isDisabled}
-        onClick={() => handleExport('pdf', exportPdf)}
-      >
-        PDF
-      </Button>
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-3">
+        <Button
+          variant="primary"
+          loading={loading.png}
+          disabled={isDisabled}
+          onClick={() => handleExport('png', exportPng)}
+        >
+          PNG
+        </Button>
+        <Button
+          variant="primary"
+          loading={loading.svg}
+          disabled={isDisabled}
+          onClick={() => handleExport('svg', exportSvg)}
+        >
+          SVG
+        </Button>
+        <Button
+          variant="primary"
+          loading={loading.pdf}
+          disabled={isDisabled}
+          onClick={() => handleExport('pdf', exportPdf)}
+        >
+          PDF
+        </Button>
+      </div>
+      {exportError && (
+        <p className="text-sm text-red-600" role="alert">{exportError}</p>
+      )}
     </div>
   );
 }
